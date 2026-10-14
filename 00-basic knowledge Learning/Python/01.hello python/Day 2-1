@@ -1,0 +1,29 @@
+"""
+Day 2 Python基础练习
+
+学习内容:
+1. 变量
+2. 数据类型
+3. f-string格式化输出
+
+作者:
+Moken
+"""
+print("Hello my first program")
+name="Moken"
+age=24
+weigth=74.5
+height=174
+ai_learning=True
+
+ #F负责变量替换,而使用三对""可以让字符串跨行显示,且注释不要写入F内，否则也被看为变量替换；
+print(
+    f""" 
+=======个人信息=======
+       姓名:{name}
+       年龄:{age}
+       身高:{height}
+       体重:{weigth}
+       是否学习AI:{ai_learning}
+    """
+)
