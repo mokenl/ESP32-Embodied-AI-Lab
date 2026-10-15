@@ -17,6 +17,9 @@ dict 的 [key] / get() / keys() / values() / items()。
 作者:
 Moken
 """
+
+
+
 """
 list 写法[a, b, c],可改,使用索引 / 顺序进行查找,适合一组同类、会变的数据（任务清单、成绩列表）
 
@@ -56,7 +59,8 @@ dict写法 {"k": v},可改,使用键名查找，适合一个对象的多个属�
 第 2 行 print(task["name"], task.get("owner", "未指派"))
     这一行有两个取值，两种写法，行为完全不同：
     task["name"] → 方括号直接取。键存在，返回 "写代码"。
-    task.get("owner", "未指派") → owner 这个键根本不存在。
+    task.get("owner", "未指派") → owner 这个键根本不存在。读"可能不存在"的字段时用 get(),
+    比如别人填的表单里没填手机号。反过来，如果你确信这个键一定在，用 [] 更直接，而且键写错时会立刻报错提醒你——这其实是好事。
     get 的第二个参数是"备用值"：找不到就返回它，返回 "未指派"。
     如果写成 task["owner"]，程序会直接抛 KeyError 崩掉.
     print 收到两个参数，默认用空格连接，所以输出 写代码 未指派——中间那个空格是 print 加的，不是字符串里的。
@@ -71,18 +75,58 @@ dict写法 {"k": v},可改,使用键名查找，适合一个对象的多个属�
 # dict 基础
 task = {"name": "写代码", "minutes": 60, "done": False}
 print(task["name"], task.get("owner", "未指派"))   # get 带默认值
-task["done"] = True           # 改
+task["done"] = True                                # 改
 print(list(task.keys()), list(task.values()))      # 键 / 值
 
+print(task.keys())        # dict_keys(['name', 'minutes', 'done'])
+for k in task:            # 遍历 dict 默认遍历的是键
+    print(k, task[k])
+for k, v in task.items(): # 想同时拿键和值就用 items(),k v分别接收键名和键值
+    print(k, ":", v)
+
 
 """
-tuple写法:(a, b, c),不可改	使用索引查找,适合一组固定搭配、不该被改的数据（坐标、阶段+周次
+tuple写法:(a, b, c),不可改	使用索引查找,适合一组固定搭配、不该被改的数据（坐标、阶段+周次）
+第 1 行 stage = ("第1周", "Python基础")
+    创建一个 tuple,两个元素，下标 0 和 1。写法上和 list 只差括号：() 是 tuple,[] 是 list。
+第 2 行 print(stage[0])
+    取值方式和 list 完全一样,用下标。stage[0] → 第1周。所以输出第一行就是 第1周。
+    顺带一提:stage[1] 是 Python基础,len(stage) 是 2。tuple 的读操作和 list 一模一样，唯一的区别是"不能写"。​
+第 3 行（注释掉的）# stage[0] = "第2周"
+    这是整段代码里最重要的一行。如果取消注释运行,Python 会直接抛：
+    TypeError: 'tuple' object does not support item assignment
+    意思是"tuple 对象不支持按项赋值"。注意报错类型是 TypeError(类型错误),
+    不是 ValueError——因为这不是"值不对"，而是"这种类型压根不允许这个操作"。
+第 4-5 行 tasks 是你前面那段 list 代码留下的变量。for t in tasks 把列表里的元素一个一个取出来，每轮赋值给 t,然后执行循环体。
+    所以三元素 → 循环三次。print("-", t) 传了两个参数："-" 和 t,print 用空格把它们连起来，所以打印出 - 读教程(第4章)。
 """
 # tuple 基础
-stage = ("第1周", "Python基础")   # 固定搭配，只读
+stage = ("第1周", "Python基础")   # 固定搭配，只读  
 print(stage[0])
 # stage[0] = "第2周"   ← 故意取消注释，看报错信息，记住这个 TypeError
 
 # 遍历
 for t in tasks:
     print("-", t)
+
+
+"""
+tuple 可以当 dict 的键,list 不行
+原因就是不可变。dict 需要靠键来定位，如果键能被改，改完就找不到了。
+"""
+
+tasks = []                                            # list 装所有任务
+
+tasks.append({
+    "name": "学list/dict/tuple",
+    "minutes": 120,
+    "stage": ("第1周", "Python基础"),                  # dict 里放 tuple
+    "done": True,
+})
+tasks.append({"name": "写学习计划管理器", "minutes": 60,
+              "stage": ("第1周", "Python基础"), "done": False})
+
+for t in tasks:                                         
+    print(t["stage"][0], "|", t["name"], "|", t["minutes"], "分钟")
+
+print("总投入：", sum(t["minutes"] for t in tasks), "分钟")
