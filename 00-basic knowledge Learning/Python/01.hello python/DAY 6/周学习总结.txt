@@ -1,0 +1,59 @@
+第一周目标：学习基础python，学会使用Git整理工程文件；
+day 1：安装Python、VS Code、Git；注册GitHub；创建主仓库
+	实际完成：1.安装Python环境；安装VS Code编译器，下载GitLens,c/c++,pylance,python,WSL插件；安装GitHub desktop;
+		2.安装Ubuntu系统，使用VS Code连接Ubuntu使用，执行第一个测试Python；
+Day 2：学习变量、数据类型、输入输出
+	实际完成：1.使用简单Python完成基础输出（使用print直接输出单句以及配合F"""完成多字符输出）；
+		2.使用inpute完成变量的输入赋值；
+		3.使用GitHub desktop进行代码管理上传GitHub项目；
+Day 3：学习if、for、while
+	实际完成：1.使用if...else...语句配合变量值来进行判断输出；
+		2.使用for语句来进行循环（for i in rang(n) range()函数生成一个整数序列，常用于for循环中表示从0至括号中的数;）
+		3.使用while语句配合变量值来进行判断输出；
+Day 4：学习list、dict、tuple
+	实际完成：1.list 写法[a, b, c],可改,使用索引；list类似数组，进行顺序查找，内存连续存放；
+			例：tasks = ["读教程", "写代码", "写笔记"]
+			       tasks.append("复盘")             # 增；增加在末尾
+			       tasks[0] = "读教程(第4章)"     # 改，将对应位置替换
+			       tasks.remove("复盘")            # 删，删除已知的固定元素，也可以使用位置来定位删除
+			       print(tasks[1], tasks[-1])       # 查：索引；打印输出对应位置的元素，-1表示最末尾一个；
+		2.dict写法 {"k": v},可改,使用键名查找，适合一个对象的多个属性（一个任务的名称/时长/状态）；可混放不同类型数据；
+			例：task = {"name": "写代码", "minutes": 60, "done": False}
+			      print(task["name"], task.get("owner", "未指派")) 	# 方括号直接取键存在返回 "写代码"owner 不存在用 get(),get 的第二个参数是"备用值找不到就返回它返回 未指派			      	      task["done"] = True                                		# 改，对键名对应的变量重新赋值；
+			      print(list(task.keys()), list(task.values()))     		# 键 / 值；task.keys() → 所有键，返回一个 dict_keys 视图对象，外面套 list() 是为了转成真正的列表再打印
+
+			      print(task.keys())        				# 输出 dict_keys(['name', 'minutes', 'done'])；
+			      for k in task:            				# 遍历 dict 默认遍历的是链，按顺数输出数组中的元素，键名键值依次输出；
+   	 			print(k, task[k])
+			      for k, v in task.items(): 				# 想同时拿键和值就用 items(),k v分别接收键名和键值
+    				print(k, ":", v)
+		3.tuple写法:(a, b, c),不可改，使用索引查找,适合一组固定搭配、不该被改的数据
+			例：stage = ("第1周", "Python基础")   			# 固定搭配，只读  
+			      print(stage[0])					# stage[0] = "第2周"   ← 故意取消注释，看报错信息，记住这个 TypeError
+			      for t in tasks:
+				print("-", t)				# 遍历task；
+		4.综合使用：tasks = []                                            			# list 装所有任务
+			   tasks.append({					#向list中添加元素；元素使用dict写法
+    				"name": "学list/dict/tuple",
+   				 "minutes": 120,
+   				 "stage": ("第1周", "Python基础"),                  	# dict 里放 tuple
+   				 "done": True,
+			    })
+			   tasks.append({"name": "写学习计划管理器", "minutes": 60,
+             				 "stage": ("第1周", "Python基础"), "done": False})
+
+			   for t in tasks:                                         
+    				print(t["stage"][0], "|", t["name"], "|", t["minutes"], "分钟")
+
+			   print("总投入：", sum(t["minutes"] for t in tasks), "分钟")
+
+Day 5：学习函数、模块
+Day 6：学习git init/add/commit/push
+Day 7：整理第一周笔记
+
+
+
+
+
+
+
