@@ -1,0 +1,62 @@
+"""
+知识目标
+    掌握 def 定义函数、调用函数、参数、return 四件事的完整写法。
+    分清「有 return」和「没有 return」的区别——后者返回 None。
+    掌握默认参数、关键字参数、以及位置参数必须在关键字参数之前这条规则。
+    理解局部变量与全局变量，知道 UnboundLocalError 为什么会发生。
+    掌握 import 模块名 / from 模块 import 函数 两种导入方式，以及 if __name__ == "__&#8203;main__": 的作用。
+能力目标
+    把 Day 4 的 day4.py 拆成 两个文件:task_manager.py(模块，装函数)+ day5.py(主程序，只负责调用)。
+    重构后运行结果必须和 Day 4 完全一致——这是判断重构是否成功的唯一标准。
+为什么今天学这个
+    Day 4 的 day4.py 是一段"从上跑到下"的脚本，读代码的人得从头看到尾才知道它在干嘛。今天要把它变成"声明式"的：主程序一眼就能看出做了什么，
+    具体怎么实现藏在模块里。Day 10 学类与对象时,就是把这套思路再往前推一步;Day 13 的学习数据分析工具也全靠模块化才能维护。
+
+"""
+"""
+def 函数名(参数):         # 1. 定义：说清楚"需要什么"
+    做的事情              # 2. 函数体：怎么处理
+    return 结果           # 3. 返回：交出什么
+
+"""
+def greet(name):           # 1. 定义：说清楚"需要什么"
+    print("Hello,", name)  # 2. 函数体：怎么处理
+    return "OK"            # 3. 返回：交出什么
+
+def show_tasks(tasks):
+    for i, task in enumerate(tasks):        #enumerate 默认从 0 开始数，所以第 1 轮 i 是 0，不是 1。这就是下一行要写 i + 1 的原因。
+        print(f"{i + 1}. {task['name']}")   #外层 f-string 用的是双引号，所以里层取字典的值必须用单引号 task['name']。
+                                            #如果里层也写双引号，会变成 f"{task["name"]}"，Python 分不清哪里是字符串结尾
+
+def add(x, y):
+    return x + y
+
+def add_one(lst):
+    lst.append(100)      # 改的是同一个对象，外面会看到变化
+
+
+nums = [1, 2, 3]
+add_one(nums)
+print(nums)               # [1, 2, 3, 100]
+show_tasks([{"name": "读教程"}, {"name": "写代码"}, {"name": "写笔记"}])
+greet("Moken")            # 调用函数，传入参数，得到返回值
+print(add(1, 2))          # 调用函数，传入参数，得到返回值并打印返回值 
+
+"""
+# ① 参数顺序：位置参数不能写在关键字参数后面
+add(b=5, 3)          # SyntaxError: positional argument follows keyword argument
+
+# ② 作用域：函数里改全局变量会报错
+count = 0
+def bad():
+    count = count + 1      # UnboundLocalError: cannot access local variable 'count'
+bad()
+
+# ③ 忘记 return:函数返回 None,不能拿去运算
+total = no_return(1)
+print(total + 1)     # TypeError: unsupported operand type(s) for +: 'NoneType' and 'int'
+
+# ④ 参数个数不匹配
+greet()              # TypeError: greet() missing 1 required positional argument: 'name'
+
+"""
