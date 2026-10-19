@@ -49,3 +49,26 @@ line.strip() —— 去掉字符串首尾的空白字符（\n、\r、空格、\t
 不去的话,print 输出完 line 自带的换行后，又补一个换行，结果每行之间都会多出一个空行
 print(i, line.strip()) —— 两个参数用空格连接，所以是 1 第一行，中间一个空格
 """
+
+
+"""
+ ① 读不存在的文件
+open("nope.txt", "r")
+# → FileNotFoundError: [Errno 2] No such file or directory: 'nope.txt'
+
+ ② 忘了 encoding，中文乱码
+with open("bad.txt", "w") as f:      # Windows 默认用 GBK
+    f.write("中文内容")
+# → 写入成功，但换个编码读就全是乱码
+
+ ③ 路径用反斜杠被当转义符
+open("D:\new\test.txt")
+# → \n 被当成换行、\t 被当成制表符，路径彻底错了
+open(r"D:\new\test.txt")             # ✅ 加 r（原始字符串）
+open("D:/new/test.txt")              # ✅ 或者用正斜杠
+
+ ④ 用 w 模式打开重要文件
+# 先用 w 打开一个有内容的文件，什么都不写就关闭 → 内容全没了
+
+
+"""
