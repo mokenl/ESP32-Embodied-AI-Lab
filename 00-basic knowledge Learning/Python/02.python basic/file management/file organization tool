@@ -1,0 +1,40 @@
+import os
+import shutil
+
+RULES = {
+    ".py":  "代码",
+    ".txt": "文档",
+    ".md":  "文档",
+    ".jpg": "图片",
+    ".png": "图片",
+    ".zip": "压缩包",
+}
+
+def organize(folder):
+    """按扩展名把文件分类移动到子文件夹，返回整理的文件数"""
+    if not os.path.isdir(folder):
+        print(f"目录不存在：{folder}")
+        return 0
+
+    moved = 0
+    for name in os.listdir(folder):
+        path = os.path.join(folder, name)
+
+        if not os.path.isfile(path):      # 跳过子目录
+            continue
+
+        ext = os.path.splitext(name)[1].lower()
+        target = RULES.get(ext, "其他")    # 找不到规则就归到「其他」
+        target_dir = os.path.join(folder, target)
+
+        os.makedirs(target_dir, exist_ok=True)   # 已存在也不报错
+        shutil.move(path, os.path.join(target_dir, name))
+
+        moved += 1
+        print(f"  {name}  →  {target}/")
+
+    return moved
+
+if __name__ == "__main__":
+    total = organize("test_folder")
+    print(f"\n共整理 {total} 个文件")
