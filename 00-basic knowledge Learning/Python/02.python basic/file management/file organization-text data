@@ -1,0 +1,7 @@
+import os
+
+os.makedirs("test_folder", exist_ok=True)
+for name in ["a.py", "b.txt", "c.md", "d.jpg", "e.zip", "f.xyz"]:
+    open(os.path.join("test_folder", name), "w").close()
+print("测试目录已就绪")
+
