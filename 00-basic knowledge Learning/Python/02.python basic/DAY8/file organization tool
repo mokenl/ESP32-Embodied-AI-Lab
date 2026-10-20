@@ -1,0 +1,45 @@
+import os
+import shutil   #高级文件操作：移动、复制、删除整个目录树。os 管"路径和目录"，shutil 管"搬运内容"，分工不同
+
+RULES = {
+    ".py":  "代码",
+    ".txt": "文档",
+    ".md":  "文档",
+    ".jpg": "图片",
+    ".png": "图片",
+    ".zip": "压缩包",
+}
+"""
+一张"扩展名 → 分类"的映射表。把它单独放在函数外面（模块级），有两个好处：
+    改规则不用动函数逻辑，加一行 .mp4: "视频" 就扩展了新类型。
+    函数只负责"查表"，不负责"记表"——这就是 Day 5 讲的职责分离。
+"""
+
+def organize(folder):
+    """按扩展名把文件分类移动到子文件夹，返回整理的文件数"""
+    if not os.path.isdir(folder):       #守卫检查：先确认这个路径是不是一个存在的目录。os.path.isdir 对三种情况都返回 False：路径不存在、路径是文件、路径是空字符串。所以这一个判断挡住了三种错误输入。
+        print(f"目录不存在：{folder}")
+        return 0
+
+    moved = 0                           #累加器：在循环开始前把计数归零。这个变量必须放在 for 外面——如果放在循环里，每轮都会被重置成 0，最后永远是 1。
+    for name in os.listdir(folder):     #os.listdir 返回目录下所有条目的名字列表——只有名字，不含路径。
+        path = os.path.join(folder, name)   #把"目录 + 名字"拼成完整路径，比如 test_folder/a.py
+
+        if not os.path.isfile(path):      # 跳过子目录 os.listdir 会把子文件夹列出来
+            continue                      #跳过本轮剩下的代码，直接进入下一轮循环
+
+        ext = os.path.splitext(name)[1].lower()     #os.path.splitext("a.py") 返回一个元组;[1].lower() 表示之前取出的元祖第二个元素转小写
+        target = RULES.get(ext, "其他")             # 查表拿分类名;找不到规则就归到「其他」target = RULES.get(ext, "其他")查表拿分类名,get 的第二个参数是"找不到时的默认值"
+        target_dir = os.path.join(folder, target)   #拼出目标文件夹路径，比如 test_folder/代码
+
+        os.makedirs(target_dir, exist_ok=True)   # 已存在也不报错
+        shutil.move(path, os.path.join(target_dir, name))   #把文件从原位置移到目标位置。两个参数都是完整路径：源路径、目标路径;为什么用 shutil.move 而不是 os.rename：os.rename 只能在同一块磁盘内改名，跨盘符（比如 D: 移到 C:）会报错。shutil.move 内部判断了这种情况——同盘就改名，跨盘就先复制再删除。​移动文件统一用 shutil.move 更安全。
+
+        moved += 1                              #每成功搬一个，计数加一
+        print(f"  {name}  →  {target}/")        #即时反馈，让你看到每个文件去哪儿了。前面两个空格是为了缩进好看，→ 是普通字符，/ 手动加上表示"这是个文件夹"
+
+    return moved
+
+if __name__ == "__main__":                      #直接 python file_tool.py → __name__ 是 "__&#8203;main__" → 执行;被别的文件 import → __name__ 是 "file_tool" → 不执行
+    total = organize("test_folder")             #调用函数，把返回值存进 total
+    print(f"\n共整理 {total} 个文件")
