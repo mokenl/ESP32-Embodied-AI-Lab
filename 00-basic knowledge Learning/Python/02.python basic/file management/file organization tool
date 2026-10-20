@@ -28,7 +28,7 @@ def organize(folder):
         if not os.path.isfile(path):      # 跳过子目录 os.listdir 会把子文件夹列出来
             continue                      #跳过本轮剩下的代码，直接进入下一轮循环
 
-        ext = os.path.splitext(name)[1].lower()     #os.path.splitext("a.py") 返回一个元组;.lower() 转小写
+        ext = os.path.splitext(name)[1].lower()     #os.path.splitext("a.py") 返回一个元组;[1].lower() 表示之前取出的元祖第二个元素转小写
         target = RULES.get(ext, "其他")             # 查表拿分类名;找不到规则就归到「其他」target = RULES.get(ext, "其他")查表拿分类名,get 的第二个参数是"找不到时的默认值"
         target_dir = os.path.join(folder, target)   #拼出目标文件夹路径，比如 test_folder/代码
 
