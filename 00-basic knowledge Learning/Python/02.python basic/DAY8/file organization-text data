@@ -1,0 +1,47 @@
+import os
+
+os.makedirs("test_folder", exist_ok=True)
+for name in ["a.py", "b.txt", "c.md", "d.jpg", "e.zip", "f.xyz"]:
+    open(os.path.join("test_folder", name), "w").close()
+print("测试目录已就绪")
+
+"""
+第 1 行 import os
+导入 os 模块。它提供"和操作系统打交道"的功能:建目录、删目录、列文件、拼路径、判断文件类型。Python 自带的，不用安装.
+
+第 2 行 os.makedirs("test_folder", exist_ok=True)
+创建一个叫 test_folder 的目录。
+两个参数都值得说：
+    makedirs 而不是 mkdir:os.mkdir 只能建一级目录,如果父目录不存在就报错。
+    os.makedirs 能递归创建多级，比如 os.makedirs("a/b/c") 会把 a、a/b、a/b/c 一次性都建出来。日常用 makedirs 更省心。
+    exist_ok=True:目录已存在时不报错.​不加这个参数,第二次运行就会抛 FileExistsError: [WinError 183] 
+    当文件已存在时，无法创建该文件。加了它，重复运行就变成"什么都不做，继续往下走"。
+
+第 3 行 for name in ["a.py", "b.txt", "c.md", "d.jpg", "e.zip", "f.xyz"]:
+    遍历一个列表字面量，每次把一个文件名赋给 name。这里直接把列表写在 for 后面，没有先赋值给变量——完全合法，临时用完就丢的列表没必要起名字。
+    name 就是 Day 5 讲过的循环变量,6 个元素 → 循环 6 轮
+
+第 4 行 open(os.path.join("test_folder", name), "w").close()
+    这一行串了三个动作：
+    ① os.path.join("test_folder", name)
+        把目录名和文件名拼成一个完整路径。第一轮拼出来是：
+            "test_folder/a.py"        # Linux / macOS
+            "test_folder\\a.py"       # Windows
+        为什么不直接写 "test_folder/" + name?因为 Windows 用反斜杠、Linux 用正斜杠，手拼的字符串换系统就错.
+        os.path.join 会自动用当前系统的分隔符——这是跨平台代码的基本写法.
+    ② open(路径, "w")
+        用写模式打开文件。文件不存在时会自动创建（这是 w 和 a 的共同点,r 就不行）。
+        因为后面什么都没写，所以创建出来的是个 0 字节的空文件
+    ③ .close()
+        立刻关闭文件。
+        为什么必须关？ open() 会向操作系统申请一个"文件句柄"（可以理解为"这个文件我占着，别人别动"）。
+        不关就一直占着，占多了会报 Too many open files;在 Windows 上还表现为文件无法删除、无法重命名。
+        为什么这里用链式写法 open(...).close() 而不是 with?
+        因为这段代码只"创建文件"，不需要往里写东西，用 with 反而多两行缩进。链式写法在这里是合理的
+        不过严格来说，更规范的写法是:
+        with open(os.path.join("test_folder", name), "w"):
+            pass
+第 5 行 print("测试目录已就绪")
+    循环结束后打印一行提示。注意它在 for 外面（没有缩进），所以只打印一次，不是 6 次
+
+"""
